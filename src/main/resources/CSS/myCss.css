@@ -1,0 +1,9 @@
+.blue{
+    -fx-background-color:  #3c9cdc;
+}
+.hbox{
+    -fx-font-family: Maku;
+    -fx-font-size: 30px;
+    -fx-alignment: center;
+
+}
