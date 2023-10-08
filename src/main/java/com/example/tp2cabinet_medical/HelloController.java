@@ -65,22 +65,32 @@ public class HelloController implements Initializable {
             alert.showAndWait();
         }
 
+        if (!monPlanning.containsKey(dateRdv.getValue().toString())) {
+            monPlanning.put(dateRdv.getValue().toString(), new TreeMap<>());
+        }
+
         int heure = (int) spnHeure.getValue();
         int minute = (int) spnMinute.getValue();
 
         String heureRdv = (heure < 10 ? "0" : "") + heure + ":" + (minute < 10 ? "0" : "") + minute;
 
-        String patient=txtPtient.getText();
-        String patho=cboPatho.getSelectionModel().getSelectedItem().toString();
-        RendezVous rendezVous = new RendezVous(heureRdv,patient,patho);
+        TreeMap<String, RendezVous> rendezVousMap = monPlanning.get(dateRdv.getValue().toString());
 
-
-
-        if (!monPlanning.containsKey(dateRdv.getValue().toString())) {
-            monPlanning.put(dateRdv.getValue().toString(), new TreeMap<>());
+        // Vérifier si un rendez-vous existe déjà à la même heure et à la même minute
+        if (rendezVousMap.containsKey(heureRdv)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erreur de saisie");
+            alert.setHeaderText("");
+            alert.setContentText("Un rendez-vous existe déjà à cette heure et minute.");
+            alert.showAndWait();
+            return;
         }
 
-        TreeMap<String, RendezVous> rendezVousMap = monPlanning.get(dateRdv.getValue().toString());
+        String patient = txtPtient.getText();
+        String patho = cboPatho.getSelectionModel().getSelectedItem().toString();
+
+        RendezVous rendezVous = new RendezVous(heureRdv, patient, patho);
+
         rendezVousMap.put(heureRdv, rendezVous);
 
 
